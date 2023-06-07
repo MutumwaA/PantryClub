@@ -1,0 +1,63 @@
+﻿<br />
+    <div class="card">
+	<div class="col">
+		<h1 class="text-primary">User List</h1>
+	</div>
+			<div class="card-body">
+					<div class="table-responsive">
+						<table id="UserTable" class="table table-bordered">
+							<thead>
+							<tr>
+						    <th>First Name</th>
+							<th>Last Name</th>
+							<th>Email</th>
+							<th>Date Of Birth</th>
+							<th></th>
+							</tr>
+							</thead>
+						</table>
+					</div>
+			</div>
+	</div>
+
+
+<script>
+	$(document).ready(function () {
+		Users();
+	});
+
+	function Users() {
+		var table = $('#UserTable').DataTable();
+		table.destroy();
+		$('#UserTable').DataTable(
+			{
+				ajax: {
+					url: "/User/Insert_data",
+					type: "POST",
+					dataType: "JSON",
+					error: function (xhr, error, thrown) {
+						console.log(' error:', error);
+						console.log('Server response:', xhr.responseText);
+						alert('Failed to retrieve data from server. Please try again later.');
+					}
+				},
+				processing: true,
+				serverSide: true,
+				filter: true,
+				autoWidth: false,
+				columns: [
+					{ data: "firstName", name: "FirstName" },
+					{ data: "lastName", name: "LastName" },
+					{ data: "email", name: "Email" },
+					{ data: "dateOfBirth", name: "DateOfBirth" },
+					{
+						data: "userId",
+						render: function (data, type, row, meta) {
+							return '<a href="/User/UserDetails/' + data + '">Details</a>';
+						}
+					},
+				]
+			}
+		);
+	}
+</script>

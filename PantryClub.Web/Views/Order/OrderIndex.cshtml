@@ -1,0 +1,105 @@
+﻿@model IEnumerable<PantryClub.Web.Models.OrderDto>
+
+@*<br />
+<br />
+<div class="container p-4 border">
+	<div class="row pb-2">
+		<div class="col">
+			<h1 class="text-primary">Order List</h1>
+		</div>
+		<div class="col text-end pt-1">
+			
+		</div>
+	</div>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Product Name
+				</th>
+				<th>
+					Quantity
+				</th>
+				<th>
+					Price
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@item.ProductName
+					</td>
+					<td>
+						@item.Quantity
+					</td>
+					<td>
+						@((item.Price).ToString("c"))
+					</td>
+					<td>
+
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+*@
+
+<br />
+<div class="card">
+	<div class="col">
+		<h1 class="text-primary">Orders List</h1>
+	</div>
+	<div class="card-body">
+		<div class="table-responsive">
+			<table id="OrderTable" class="table table-bordered">
+				<thead>
+					<tr>
+						<th>ProductName</th>
+						<th>Price</th>
+						<th>Quantity</th>
+					</tr>
+				</thead>
+			</table>
+		</div>
+	</div>
+</div>
+
+
+<script>
+	$(document).ready(function () {
+		Orders();
+	});
+
+	function Orders() {
+		var table = $('#OrderTable').DataTable();
+		table.destroy();
+		$('#OrderTable').DataTable(
+			{
+				ajax: {
+					url: "/Order/Insert_data",
+					type: "POST",
+					dataType: "JSON",
+					error: function (xhr, error, thrown) {
+						console.log(' error:', error);
+						console.log('Server response:', xhr.responseText);
+						alert('Failed to retrieve data from server. Please try again later.');
+					}
+				},
+				processing: true,
+				serverSide: true,
+				filter: true,
+				autoWidth: false,
+				columns: [
+					{ data: "productName", name: "Product Name" },
+					{ data: "price", name: "Price" },
+					{ data: "quantity", name: "Quantity" }
+				]
+			}
+		);
+	}
+</script>
