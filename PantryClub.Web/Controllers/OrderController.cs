@@ -27,7 +27,7 @@ namespace PantryClub.Web.Controllers
         }
 
 		[HttpPost]
-		public async Task<IActionResult> Insert_data()
+		public async Task<IActionResult> Getdata()
 		{
 			try
 			{
